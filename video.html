@@ -26,34 +26,27 @@
       <div class="container px-4">
       <div class="row gx-5">
       <div class="col">
-       <div class="p-3 border bg-light">Camera 1</div>
+       <div class="p-3 border bg-light" id='c1'>Camera 1</div>
       </div>
       <div class="col">
-        <div class="p-3 border bg-light">Camera 2</div>
+        <div class="p-3 border bg-light" id='c2'>Camera 2</div>
       </div>
       </div>
       </div>
 
     <video id="example_video_1" class="video-js" controls preload="none" width="1368" height="378" poster="http://vjs.zencdn.net/v/oceans.png" data-setup='{}'>
-      <source src="assets/videos/output.mp4" type="video/mp4">
+      <source src="assets/videos/0001_grip_alignment.mp4" type="video/mp4">
       <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
       <source src="http://vjs.zencdn.net/v/oceans.ogv" type="video/ogg">
       <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
     </video>
 
-<div class="mx-auto" style="width: 200px;">
- / /
-</div>
-<button type="button" class="btn btn-primary btn-lg">Start</button>
-<div class="mx-auto" style="width: 200px;">
- / /
-</div>
+<div id=instruction_container>
 
-
-<div class="card" style="width: 18rem;">
-
+<div class="card text-white bg-danger mb-3" id='instruction_joystick' style="width: 18rem;">
+  <div class="card-header">New Instruction</div>
   <div class="card-body">
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <p class="card-text">**INSTRUCTION**</p>
 
     <div id="joystick" style="width:80%">
   <svg width="100%" height="100%" viewBox="0 0 100 100">
@@ -74,11 +67,11 @@
     <circle cx="50" cy="50" r="50" fill="url(#grad1)" />
     <circle cx="50" cy="50" r="47" fill="url(#grad2)" stroke="black" stroke-width="1.5px" />
     <circle cx="50" cy="50" r="44" fill="url(#grad3)" />
-    <circle cx="50" cy="50" r="20" fill="#cccccc" stroke="black" stroke-width="1px" onclick="alert('CENTER');" />
-    <path d="M50,14 54,22 46,22Z" fill="rgba(0,0,0,0.8)" onclick="alert('UP');" />
-    <path d="M50,86 54,78 46,78Z" fill="rgba(0,0,0,0.8)" onclick="alert('DOWN');" />
-    <path d="M14,50 22,54 22,46Z" fill="rgba(0,0,0,0.8)" onclick="alert('LEFT');" />
-    <path d="M86,50 78,54 78,46Z" fill="rgba(0,0,0,0.8)" onclick="alert('RIGHT');" />
+    <circle cx="50" cy="50" r="20" fill="#cccccc" stroke="black" stroke-width="1px" onclick="instruction_response(5,0,0);" />
+    <path d="M50,14 54,22 46,22Z" fill="rgba(0,0,0,0.8)" onclick="instruction_response(1,0,0);" />
+    <path d="M50,86 54,78 46,78Z" fill="rgba(0,0,0,0.8)" onclick="instruction_response(3,0,0);" />
+    <path d="M14,50 22,54 22,46Z" fill="rgba(0,0,0,0.8)" onclick="instruction_response(4,0,0);" />
+    <path d="M86,50 78,54 78,46Z" fill="rgba(0,0,0,0.8)" onclick="instruction_response(2,0,0);" />
   </svg>
 </div>
 
@@ -86,18 +79,19 @@
   </div>
 </div>
 
+<div class="card text-white bg-danger mb-3" id='instruction_locate' style="width: 18rem;">
+  <div class="card-header">New Instruction</div>
+  <div class="card-body">
+    <p class="card-text">**INSTRUCTION**</p>
+
+
+  </div>
+</div>
+
+</div>
 
   </center>
 
-
-
-
-
-  <button onclick=
-      "show_image('https://upload.wikimedia.org/wikipedia/commons/b/b9/First-google-logo.gif',
-                   276,
-                   110,
-                  'Google Logo');">Add Google Logo</button>
 
 
                    <!-- Optional JavaScript -->
