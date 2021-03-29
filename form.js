@@ -1,6 +1,7 @@
 
 var id;
 
+
 function id(){
   return id;
 }
@@ -19,10 +20,20 @@ function submit(){
   id = makeid(5);
   var email = document.getElementById("email").value;
   var experience = document.getElementById('experience').value;
+  var name = document.getElementById('experience').value;
   var start = document.getElementById("start");
   var submit = document.getElementById("submit");
+  var loading = document.getElementById("loading");
+  var scr_w = window.innerWidth;
+  var scr_h = window.innerHeight;
 
-  var data = {uid: id,email:email,experience: experience};
+  var data = {uid: id,email:email,experience: experience,name:name,scr_w:scr_w,scr_h,scr_h};
+
+  submit.parentNode.removeChild(submit);
+
+  loading.setAttribute("class","spinner-grow");
+  loading.setAttribute("role","status");
+
 
   $.ajax({
     url: "https://script.google.com/macros/s/AKfycbxgyo4a3jsVQK76o2wNbU5j_qTbNDWnDI2Vc09vK8CE7651dST70-siVuf90X86-GiH/exec",
@@ -33,8 +44,11 @@ function submit(){
   })
   .done(function(res) {
     console.log('success')
+    loading.removeAttribute("class","spinner-grow");
+    loading.removeAttribute("role","status");
     start.disabled = false;
     submit.disabled = true;
+
   })
   .fail(function(e) {
     console.log("error")
@@ -43,7 +57,9 @@ function submit(){
   return id;
 }
 
-
+function detectMob() {
+    return ( ( window.innerWidth <= 800 ) && ( window.innerHeight <= 600 ) );
+}
 
 /*
 document.querySelector('#btnSubmit').addEventListener('click', () => {

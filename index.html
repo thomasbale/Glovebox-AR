@@ -35,10 +35,10 @@
   <form>
   <div class="form-group">
     <label for="exampleFormControlInput2">Submission ID</label>
-    <input type="email" class="form-control" id="id" placeholder="name@example.com" readonly>
+    <input type="uid" class="form-control" id="id" placeholder="uid" readonly>
 
     <label for="exampleFormControlInput1">Name</label>
-    <input type="email" class="form-control" id="name" placeholder="name@example.com">
+    <input type="name" class="form-control" id="name" placeholder="Firstname Lastname">
 
     <label for="exampleFormControlInput1">Email address</label>
     <input type="email" class="form-control" id="email" placeholder="name@example.com">
@@ -119,7 +119,18 @@
 
 </div>
 
+<div class="alert alert-warning alert-dismissible fade show" role="alert" id='mobilewarn'>
+  <strong>Warning!</strong> Your screen must be greater than 800x600. Ensure you use a PC or laptop.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+
 <button type="button" id="submit" class="btn btn-primary btn-lg" onclick="uid=submit()">Agree and submit</button>
+<div id='loading'>
+  <span class="sr-only">Loading...</span>
+</div>
 <button type="button" id="start" class="btn btn-primary btn-lg" disabled onclick="window.location.href='video.html?'+uid">Start</button>
 
 </div>
