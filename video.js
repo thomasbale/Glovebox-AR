@@ -103,7 +103,17 @@ function instruction_response(direction,x,y){
 
 function submit_response(uid,direction,x,y){
   if (instruction_live) {
-    var data = {uid:uid,video: player.src(),req_ts:pausetime,sub_ts: player.currentTime(), camera: 1,direction: direction,x:x,y:y};
+    var data = {
+      uid:uid,
+      video: player.src(),
+      req_ts:pausetime,
+      sub_ts: player.currentTime(),
+      direction: direction,x:x,y:y,video:get_data()[randomIndex].asset.video,
+      treatment:get_data()[randomIndex].asset.treatment,
+      camera:get_data()[randomIndex].asset.camera,
+      optimalx:get_data()[randomIndex].asset.optimal_x,
+      optimaly:get_data()[randomIndex].asset.optimal_y,
+      optimaldir:get_data()[randomIndex].asset.optimal_direction};
     $.ajax({
       url: "https://script.google.com/macros/s/AKfycbzzbTwGnkEsRNVRz7Yr9Vwq75lFnrRR22NOA3oA8r4cQKTKUJ5TAOuJkxpaZi2CpVnaaw/exec",
       type: "POST",
@@ -117,8 +127,6 @@ function submit_response(uid,direction,x,y){
     });
   }
 }
-
-
 // there will be a single pause
 player.on('timeupdate', function(e) {
     if (player.currentTime() >= pausetime) {
@@ -188,7 +196,7 @@ function update_video(){
   responsegiven = 0;
   instruction_live = 0;
   // perhaps this line needs removing
-  if (!current_instruction) {
+  if (current_instruction) {
     current_instruction.parentNode.removeChild(current_instruction);
   }
   set_camera(3);
