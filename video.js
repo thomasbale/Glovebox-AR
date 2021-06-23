@@ -28,8 +28,8 @@ setInterval(save, 10 * 1000);
 
 
 
-var videos = [...Array(get_data().length).keys()]
-shuffle(videos);
+
+//update_video();
 // Adapted from examples on the Querystring homepage.
 
 id = parent.document.URL.substring(parent.document.URL.indexOf('?'), parent.document.URL.length);
@@ -49,11 +49,30 @@ instruction_joystick.parentNode.removeChild(instruction_joystick);
 current_instruction = instruction_joystick;
 var instruction_live = 0;
 var responsegiven = 0;
+
+var attempt = 0;
+var videos = [...Array(get_data().length).keys()]
+shuffle(videos);
 var vid_seq = 0;
+var randomIndex = videos[vid_seq]
+// should we pause?
+var paused = 1;
+// At what time?
+var pausetime = 10; // stop at 2 seconds
+// One click or many?
+var single_response = 1;
+
+
+//console.log(videojs.players)
+player = videojs('example_video_1')
+//update_video();
+//sessionStorage.myValue = 'value'
+console.log(sessionStorage.email)
+console.log(sessionStorage.experience)
+player.controls(false);
 
 
 function render_instruction(){
-
   set_camera(get_data()[randomIndex].asset.camera);
   if (get_data()[randomIndex].asset.type == 1) {
     current_instruction = instruction_joystick;
@@ -68,14 +87,17 @@ function render_instruction(){
 
 function instruction_response(direction,x,y){
   // 1=up, 2=right,3=down,4=left,5=grip
+  player.play();
+  responsegiven = 1;
   if (instruction_live) {
-    responsegiven = 1;
     submit_response(id,direction,x,y)
-    // clear up
     instruction_live = 0;
-    player.play();
-    set_camera(3);
     current_instruction.parentNode.removeChild(current_instruction);
+    set_camera(3)
+    if (!single_response) {
+      render_instruction()
+      instruction_live=1;
+    }
   }
 }
 
@@ -96,28 +118,13 @@ function submit_response(uid,direction,x,y){
   }
 }
 
-//console.log(videojs.players)
-player = videojs('example_video_1')
-
-
-//sessionStorage.myValue = 'value'
-console.log(sessionStorage.email)
-console.log(sessionStorage.experience)
-
-player.controls(false)
-
-var pausetime = 10; // stop at 2 seconds
-var stop_flag = 1;
-var attempt = 0;
-
 
 // there will be a single pause
 player.on('timeupdate', function(e) {
     if (player.currentTime() >= pausetime) {
-      randomIndex = videos[vid_seq]
-
+      //randomIndex = videos[vid_seq]
       if (responsegiven == 0) {
-        if (get_data()[randomIndex].asset.paused) {
+        if (paused) {
           player.pause();
         }
         render_instruction();
@@ -128,29 +135,22 @@ player.on('timeupdate', function(e) {
 player.on('ended', function() {
 
     // if we don't have a response before the end replay
-    if (responsegiven == 0){
-      player.currentTime(0);
-      player.play();
-      attempt = attempt+1;
-    }else {
-      set_camera(3)
-      /// this is the breakpoint where the next video session loads
-      video ="assets/videos/"+get_data()[randomIndex].asset.video;
-      pausetime = get_data()[randomIndex].asset.timestamp;
-      stop_flag = 1;
-
-      player.src(video)
-      vid_seq = vid_seq + 1;
-      responsegiven = 0;
-    }
+    //if (responsegiven == 0){
+  //player.currentTime(0);
+    //  player.play();
+    //  attempt = attempt+1;
+    //}else {
+  update_video()
+  //player.play()
+    //}
 });
 
 document.getElementById('example_video_1').onclick = function clickEvent(e) {
     if ((player.paused()) && (player.currentTime() <= 1)){
       player.play();
+      //set_camera(2)
     }else {
       player.play();
-
       // e = Mouse click event.
       var rect = e.target.getBoundingClientRect();
       var x = e.clientX - rect.left; //x position within the element.
@@ -159,6 +159,41 @@ document.getElementById('example_video_1').onclick = function clickEvent(e) {
     }
   }
 
+function update_video(){
+
+  console.log(vid_seq)
+  console.log(videos.length)
+  if (vid_seq==videos.length) {
+    window.location.replace("http://www.w3schools.com");
+  }
+  /// this is the breakpoint where the next video session loads
+  randomIndex = videos[vid_seq]
+  video = get_data()[randomIndex].asset.video
+  console.log(video)
+  videomp4 ="assets/videos/mp4/"+video+".mp4";
+  videoogg ="assets/videos/ogv/"+video+".ovg";
+  videowebm ="assets/videos/webm/"+video+".webm";
+
+  pausetime = get_data()[randomIndex].asset.timestamp;
+  // should we pause?
+  paused = get_data()[randomIndex].asset.paused;
+  // One click or many?
+  single_response = get_data()[randomIndex].asset.single_response;
+
+  player.src({type: 'video/mp4', src: videomp4});
+  player.src({type: 'video/ogg', src: videoogg});
+  player.src({type: 'video/webm', src: videowebm});
+  //this moves to the next random video
+
+  responsegiven = 0;
+  instruction_live = 0;
+  // perhaps this line needs removing
+  if (!current_instruction) {
+    current_instruction.parentNode.removeChild(current_instruction);
+  }
+  set_camera(3);
+  vid_seq = vid_seq + 1;
+}
 
 function set_camera(c){
 
@@ -173,6 +208,10 @@ function set_camera(c){
   }
   if (c == 2) {
     c2.setAttribute("class", "p-3 border bg-warning");
+  }
+  if (c == 4) {
+    c2.setAttribute("class", "p-3 border bg-warning");
+    c1.setAttribute("class", "p-3 border bg-warning");
   }
 }
 
@@ -223,16 +262,18 @@ const downloadToFile = (content, filename, contentType) => {
 };
 
 function get_data(){
+
   var data =
   [
   {
     "asset":{
       "id":1,
-      "video":"0001_grip_alignment.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 1.",
+      "video":"11",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click .",
+      "single_response":1,
       "image":"",
       "camera":1,
       "type":1,
@@ -243,15 +284,16 @@ function get_data(){
   },
   {
     "asset":{
-      "id":2,
-      "video":"0002_plate_alignment.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 1.",
+      "id":1,
+      "video":"12",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click .",
+      "single_response":0,
       "image":"",
-      "camera":1,
-      "type":0,
+      "camera":4,
+      "type":2,
       "optimal_direction":1,
       "optimal_x":1,
       "optimal_y":1
@@ -259,531 +301,21 @@ function get_data(){
   },
   {
     "asset":{
-      "id":3,
-      "video":"0003_tray_locate_and_move.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":4,
-      "video":"0004_tray_position_target.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":5,
-      "video":"0005_target_object.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":6,
-      "video":"0006_rotate_slot.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":7,
-      "video":"0007_place_slot.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":8,
-      "video":"0008_find_radtin.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":9,
-      "video":"0009_target_radtin.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":10,
-      "video":"0010_grip_radtin_horiz.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":11,
-      "video":"0011_palce_radtin_rack.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
       "id":12,
-      "video":"0012_grip_plate_target.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
+      "video":"14",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Here is a test instructions. Please use Camera 1.",
+      "single_response":1,
       "image":"",
-      "camera":2,
-      "type":0,
+      "camera":1,
+      "type":1,
       "optimal_direction":1,
       "optimal_x":1,
       "optimal_y":1
     }
   }
-,
-  {
-    "asset":{
-      "id":13,
-      "video":"0013_lower_plate_target.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":14,
-      "video":"0014_collision_sponge_radjar.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":15,
-      "video":"0015_joint_limits_arm.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":16,
-      "video":"0016_joint_limits_arm.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":17,
-      "video":"0017_grip_plate.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":18,
-      "video":"0018_target_plate.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":19,
-      "video":"0019_pick_slot.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":20,
-      "video":"0020_pick_slot.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":21,
-      "video":"0021_collision_jar.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":22,
-      "video":"0022_grip_plate.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":23,
-      "video":"0023_lower_plate_witherror.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":24,
-      "video":"0024_move_tray_target.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":25,
-      "video":"0101_grip_alignment.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":26,
-      "video":"0101_grip_alignment.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":27,
-      "video":"0102_plate_alignment.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":28,
-      "video":"0112_grip_plate_target.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":29,
-      "video":"0113_lower_plate_target.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":30,
-      "video":"0201_grip_alignment.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":31,
-      "video":"0202_plate_alignment.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":32,
-      "video":"0212_grip_plate_target.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-,
-  {
-    "asset":{
-      "id":33,
-      "video":"0213_lower_plate_target.mp4",
-      "treatment":"AR",
-      "paused":1,
-      "timestamp":10,
-      "instruction":"Here is a test instructions. Please use Camera 2.",
-      "image":"",
-      "camera":2,
-      "type":0,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1
-    }
-  }
-
-  ]
+]
   return data;
 }
