@@ -49,6 +49,8 @@ instruction_joystick.parentNode.removeChild(instruction_joystick);
 current_instruction = instruction_joystick;
 var instruction_live = 0;
 var responsegiven = 0;
+//where are the video files located
+var host = "assets/videos/"
 
 var attempt = 0;
 var videos = [...Array(get_data().length).keys()]
@@ -61,6 +63,14 @@ var paused = 1;
 var pausetime = 10; // stop at 2 seconds
 // One click or many?
 var single_response = 1;
+var videoid = "intro";
+var treatment = "intro";
+var camera = "intro";
+var optimalx = "intro";
+var optimaly = "intro";
+var optimaldir = "intro";
+var optimalts = "intro";
+var instruction = "This is a test instruction!"
 
 
 //console.log(videojs.players)
@@ -92,7 +102,9 @@ function instruction_response(direction,x,y){
   if (instruction_live) {
     submit_response(id,direction,x,y)
     instruction_live = 0;
-    current_instruction.parentNode.removeChild(current_instruction);
+    if (current_instruction) {
+      current_instruction.parentNode.removeChild(current_instruction);
+    }
     set_camera(3)
     if (!single_response) {
       render_instruction()
@@ -108,12 +120,14 @@ function submit_response(uid,direction,x,y){
       video: player.src(),
       req_ts:pausetime,
       sub_ts: player.currentTime(),
-      direction: direction,x:x,y:y,video:get_data()[randomIndex].asset.video,
-      treatment:get_data()[randomIndex].asset.treatment,
-      camera:get_data()[randomIndex].asset.camera,
-      optimalx:get_data()[randomIndex].asset.optimal_x,
-      optimaly:get_data()[randomIndex].asset.optimal_y,
-      optimaldir:get_data()[randomIndex].asset.optimal_direction};
+      direction: direction,x:x,y:y,
+      videoid:videoid,
+      treatment:treatment,
+      camera:camera,
+      optimalx:optimalx,
+      optimaly:optimaly,
+      optimaldir:optimaldir,
+      optimaldir:optimaldir};
     $.ajax({
       url: "https://script.google.com/macros/s/AKfycbzzbTwGnkEsRNVRz7Yr9Vwq75lFnrRR22NOA3oA8r4cQKTKUJ5TAOuJkxpaZi2CpVnaaw/exec",
       type: "POST",
@@ -148,7 +162,9 @@ player.on('ended', function() {
     //  player.play();
     //  attempt = attempt+1;
     //}else {
+  randomIndex = videos[vid_seq]
   update_video()
+  vid_seq = vid_seq + 1;
   //player.play()
     //}
 });
@@ -175,32 +191,42 @@ function update_video(){
     window.location.replace("http://www.w3schools.com");
   }
   /// this is the breakpoint where the next video session loads
-  randomIndex = videos[vid_seq]
+
   video = get_data()[randomIndex].asset.video
   console.log(video)
-  videomp4 ="assets/videos/mp4/"+video+".mp4";
-  videoogg ="assets/videos/ogv/"+video+".ovg";
-  videowebm ="assets/videos/webm/"+video+".webm";
+  // improve browser compatibility
+  videomp4 =host+"mp4/"+video+".mp4";
+  videoogg =host+"ogv/"+video+".ovg";
+  videowebm =host+"webm/"+video+".webm";
 
   pausetime = get_data()[randomIndex].asset.timestamp;
   // should we pause?
   paused = get_data()[randomIndex].asset.paused;
   // One click or many?
   single_response = get_data()[randomIndex].asset.single_response;
+  videoid = get_data()[randomIndex].asset.video;
+  treatment = get_data()[randomIndex].asset.treatment;
+  camera = get_data()[randomIndex].asset.camera;
+  optimalx = get_data()[randomIndex].asset.optimal_x;
+  optimaly = get_data()[randomIndex].asset.optimal_y;
+  optimaldir = get_data()[randomIndex].asset.optimal_direction;
+  optimalts = get_data()[randomIndex].asset.optimal_ts;
+  instruction = get_data()[randomIndex].asset.instruction;
 
   player.src({type: 'video/mp4', src: videomp4});
   player.src({type: 'video/ogg', src: videoogg});
   player.src({type: 'video/webm', src: videowebm});
+  player.currentTime(0);
   //this moves to the next random video
 
   responsegiven = 0;
   instruction_live = 0;
   // perhaps this line needs removing
-  if (current_instruction) {
+  if (current_instruction.parentNode) {
     current_instruction.parentNode.removeChild(current_instruction);
   }
   set_camera(3);
-  vid_seq = vid_seq + 1;
+
 }
 
 function set_camera(c){
@@ -276,9 +302,99 @@ function get_data(){
   {
     "asset":{
       "id":1,
-      "video":"11",
+      "video":"1",
       "treatment":"NONE",
       "paused":0,
+      "timestamp":2,
+      "instruction":"Click grip (centre joystick) when aligned with block",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":null,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":23
+    }
+  },
+{
+    "asset":{
+      "id":2,
+      "video":"2",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":59,
+      "instruction":"Select Left or Right movement to dock plate with slot",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":4,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":3,
+      "video":"3",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":1,
+      "instruction":"Select the nearest edge of the furthest tray from the arm",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":4,
+      "video":"4",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":100,
+      "instruction":"No instruction",
+      "single_response":0,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":5,
+      "video":"5",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":13,
+      "instruction":"Rotate to pickup grip block",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":4,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":6,
+      "video":"6",
+      "treatment":"NONE",
+      "paused":1,
       "timestamp":5,
       "instruction":"Click .",
       "single_response":1,
@@ -287,41 +403,332 @@ function get_data(){
       "type":1,
       "optimal_direction":1,
       "optimal_x":1,
-      "optimal_y":1
+      "optimal_y":1,
+      "optimal_ts":1
     }
   },
-  {
+{
     "asset":{
-      "id":1,
-      "video":"12",
+      "id":7,
+      "video":"7",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":5,
+      "instruction":"Click .",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":1,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":8,
+      "video":"8",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":5,
+      "instruction":"Click .",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":1,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":9,
+      "video":"9",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":5,
+      "instruction":"Click .",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":1,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":10,
+      "video":"10",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":1,
+      "instruction":"Click where you see any collision risk",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":11,
+      "video":"11",
       "treatment":"NONE",
       "paused":0,
       "timestamp":5,
-      "instruction":"Click .",
-      "single_response":0,
+      "instruction":"Click to select destination for Raditation Tin on lower metal shelf",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":12,
+      "video":"12",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":1,
+      "instruction":"Click when gripper is aligned with block",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":13,
+      "video":"13",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":13,
+      "instruction":"Select rotation direction to dock plate with slot",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":14,
+      "video":"14",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":2,
+      "instruction":"Click when you see a likely collision",
+      "single_response":1,
       "image":"",
       "camera":4,
       "type":2,
       "optimal_direction":1,
       "optimal_x":1,
-      "optimal_y":1
+      "optimal_y":1,
+      "optimal_ts":1
     }
   },
-  {
+{
     "asset":{
-      "id":12,
-      "video":"14",
+      "id":15,
+      "video":"15",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":5,
-      "instruction":"Here is a test instructions. Please use Camera 1.",
+      "timestamp":2,
+      "instruction":"Click when you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":16,
+      "video":"16",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":11,
+      "instruction":"Select rotation direction to dock plate with slot",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":2,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":17,
+      "video":"17",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":1,
+      "instruction":"Click when gripper is aligned with block",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":18
+    }
+  },
+{
+    "asset":{
+      "id":18,
+      "video":"11",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":100,
+      "instruction":"Click .",
       "single_response":1,
       "image":"",
       "camera":1,
       "type":1,
       "optimal_direction":1,
       "optimal_x":1,
-      "optimal_y":1
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":19,
+      "video":"11",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":1,
+      "instruction":"Click on nearest slot hole",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":20,
+      "video":"11",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":1,
+      "instruction":"Rotate slot anticlockwise 90 degrees",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":4,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":21,
+      "video":"21",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":2,
+      "instruction":"Click when you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":22,
+      "video":"22",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":2,
+      "instruction":"Click when you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":23,
+      "video":"23",
+      "treatment":"NONE",
+      "paused":1,
+      "timestamp":5,
+      "instruction":"Select rotation direction to dock plate with slot",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
+    }
+  },
+{
+    "asset":{
+      "id":24,
+      "video":"24",
+      "treatment":"NONE",
+      "paused":0,
+      "timestamp":2,
+      "instruction":"Click when you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":1,
+      "optimal_x":1,
+      "optimal_y":1,
+      "optimal_ts":1
     }
   }
 ]
