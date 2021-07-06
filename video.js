@@ -50,7 +50,7 @@ current_instruction = instruction_joystick;
 var instruction_live = 0;
 var responsegiven = 0;
 //where are the video files located
-var host = "assets/videos/"
+var host = "https://glovebox-ar.fra1.cdn.digitaloceanspaces.com/"
 
 var attempt = 0;
 var videos = [...Array(get_data().length).keys()]
@@ -65,12 +65,13 @@ var pausetime = 10; // stop at 2 seconds
 var single_response = 1;
 var videoid = "intro";
 var treatment = "intro";
-var camera = "intro";
+var camera = 1;
 var optimalx = "intro";
 var optimaly = "intro";
 var optimaldir = "intro";
 var optimalts = "intro";
 var instruction = "This is a test instruction!"
+var type = 1;
 
 
 //console.log(videojs.players)
@@ -83,13 +84,15 @@ player.controls(false);
 
 
 function render_instruction(){
-  set_camera(get_data()[randomIndex].asset.camera);
-  if (get_data()[randomIndex].asset.type == 1) {
+	console.log(instruction);
+	console.log(videoid);
+  set_camera(camera);
+  if (type == 1) {
     current_instruction = instruction_joystick;
   }else {
     current_instruction = instruction_locate;
   }
-  current_instruction.innerHTML = current_instruction.innerHTML.replace('**INSTRUCTION**',get_data()[randomIndex].asset.instruction);
+  current_instruction.innerHTML = current_instruction.innerHTML.replace('**INSTRUCTION**',instruction);
   instruction_container.appendChild(current_instruction);
   instruction_live = 1;
 }
@@ -155,6 +158,7 @@ player.on('timeupdate', function(e) {
 });
 
 player.on('ended', function() {
+	current_instruction.innerHTML = current_instruction.innerHTML.replace(instruction,'**INSTRUCTION**');
 
     // if we don't have a response before the end replay
     //if (responsegiven == 0){
@@ -212,6 +216,7 @@ function update_video(){
   optimaldir = get_data()[randomIndex].asset.optimal_direction;
   optimalts = get_data()[randomIndex].asset.optimal_ts;
   instruction = get_data()[randomIndex].asset.instruction;
+	type = get_data()[randomIndex].asset.type;
 
   player.src({type: 'video/mp4', src: videomp4});
   player.src({type: 'video/ogg', src: videoogg});
