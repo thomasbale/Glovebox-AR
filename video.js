@@ -50,7 +50,7 @@ current_instruction = instruction_joystick;
 var instruction_live = 0;
 var responsegiven = 0;
 //where are the video files located
-var host = "https://glovebox-ar.fra1.cdn.digitaloceanspaces.com/"
+var host = "https://glovebox-ar.fra1.cdn.digitaloceanspaces.com/a_"
 
 var attempt = 0;
 var videos = [...Array(get_data().length).keys()]
@@ -80,7 +80,7 @@ player = videojs('example_video_1')
 //sessionStorage.myValue = 'value'
 console.log(sessionStorage.email)
 console.log(sessionStorage.experience)
-player.controls(false);
+
 
 
 function render_instruction(){
@@ -100,12 +100,14 @@ function render_instruction(){
 
 function instruction_response(direction,x,y){
   // 1=up, 2=right,3=down,4=left,5=grip
+	responsegiven = 1;
   player.play();
-  responsegiven = 1;
   if (instruction_live) {
     submit_response(id,direction,x,y)
+		//player.currentTime((player.duration()-0.5));
     instruction_live = 0;
     if (current_instruction) {
+			//player.currentTime((player.duration()-0.5));
       current_instruction.parentNode.removeChild(current_instruction);
     }
     set_camera(3)
@@ -113,6 +115,8 @@ function instruction_response(direction,x,y){
       render_instruction()
       instruction_live=1;
     }
+		//player.currentTime((player.duration()-1));
+		//player.play();
   }
 }
 
@@ -138,6 +142,10 @@ function submit_response(uid,direction,x,y){
     })
     .done(function(res) {
       console.log('success')
+			current_instruction.innerHTML = current_instruction.innerHTML.replace(instruction,'**INSTRUCTION**');
+			randomIndex = videos[vid_seq]
+		  update_video()
+		  vid_seq = vid_seq + 1;
     })
     .fail(function(e) {
       console.log("error")
@@ -191,17 +199,19 @@ function update_video(){
 
   console.log(vid_seq)
   console.log(videos.length)
+	player.controls(false);
+	player.preload(true);
   if (vid_seq==videos.length) {
-    window.location.replace("http://www.w3schools.com");
+    window.location.replace("complete.html");
   }
   /// this is the breakpoint where the next video session loads
 
   video = get_data()[randomIndex].asset.video
   console.log(video)
   // improve browser compatibility
-  videomp4 =host+"mp4/"+video+".mp4";
-  videoogg =host+"ogv/"+video+".ovg";
-  videowebm =host+"webm/"+video+".webm";
+  videomp4 =host+video+".mp4";
+  videoogg =host+video+".ovg";
+  videowebm =host+video+".webm";
 
   pausetime = get_data()[randomIndex].asset.timestamp;
   // should we pause?
@@ -310,13 +320,13 @@ function get_data(){
       "video":"1",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":2,
-      "instruction":"Click grip (centre joystick) when aligned with block",
+      "timestamp":4,
+      "instruction":"Click middle button when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":4,
       "type":1,
-      "optimal_direction":null,
+      "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
       "optimal_ts":23
@@ -329,12 +339,12 @@ function get_data(){
       "treatment":"NONE",
       "paused":1,
       "timestamp":59,
-      "instruction":"Select Left or Right movement to dock plate with slot",
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
       "single_response":1,
       "image":"",
       "camera":2,
       "type":1,
-      "optimal_direction":4,
+      "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
       "optimal_ts":null
@@ -346,34 +356,16 @@ function get_data(){
       "video":"3",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":1,
-      "instruction":"Select the nearest edge of the furthest tray from the arm",
+      "timestamp":8,
+      "instruction":"Select a suitable grip point",
       "single_response":1,
       "image":"",
       "camera":1,
       "type":2,
       "optimal_direction":null,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
-    }
-  },
-{
-    "asset":{
-      "id":4,
-      "video":"4",
-      "treatment":"NONE",
-      "paused":0,
-      "timestamp":100,
-      "instruction":"No instruction",
-      "single_response":0,
-      "image":"",
-      "camera":4,
-      "type":2,
-      "optimal_direction":null,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_x":498,
+      "optimal_y":191,
+      "optimal_ts":9
     }
   },
 {
@@ -381,35 +373,17 @@ function get_data(){
       "id":5,
       "video":"5",
       "treatment":"NONE",
-      "paused":1,
-      "timestamp":13,
-      "instruction":"Rotate to pickup grip block",
-      "single_response":1,
-      "image":"",
-      "camera":4,
-      "type":1,
-      "optimal_direction":4,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
-    }
-  },
-{
-    "asset":{
-      "id":6,
-      "video":"6",
-      "treatment":"NONE",
-      "paused":1,
-      "timestamp":5,
-      "instruction":"Click .",
+      "paused":0,
+      "timestamp":43,
+      "instruction":"Click on a suitable location to place the Plate",
       "single_response":1,
       "image":"",
       "camera":1,
-      "type":1,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":426,
+      "optimal_y":216,
+      "optimal_ts":44
     }
   },
 {
@@ -417,17 +391,17 @@ function get_data(){
       "id":7,
       "video":"7",
       "treatment":"NONE",
-      "paused":1,
-      "timestamp":5,
-      "instruction":"Click .",
+      "paused":0,
+      "timestamp":12,
+      "instruction":"Click on a suitable location to place the Plate",
       "single_response":1,
       "image":"",
       "camera":1,
-      "type":1,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":517,
+      "optimal_y":179,
+      "optimal_ts":13
     }
   },
 {
@@ -435,17 +409,17 @@ function get_data(){
       "id":8,
       "video":"8",
       "treatment":"NONE",
-      "paused":1,
-      "timestamp":5,
-      "instruction":"Click .",
+      "paused":0,
+      "timestamp":6,
+      "instruction":"Click on the Tin you need to pickup",
       "single_response":1,
       "image":"",
       "camera":1,
-      "type":1,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":266,
+      "optimal_y":151,
+      "optimal_ts":6.5
     }
   },
 {
@@ -453,17 +427,17 @@ function get_data(){
       "id":9,
       "video":"9",
       "treatment":"NONE",
-      "paused":1,
+      "paused":0,
       "timestamp":5,
-      "instruction":"Click .",
+      "instruction":"Click where you think the Tin should go",
       "single_response":1,
       "image":"",
       "camera":1,
-      "type":1,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":287,
+      "optimal_y":246,
+      "optimal_ts":6
     }
   },
 {
@@ -472,16 +446,16 @@ function get_data(){
       "video":"10",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":1,
-      "instruction":"Click where you see any collision risk",
+      "timestamp":5,
+      "instruction":"Click if and where you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":1,
       "type":2,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_direction":null,
+      "optimal_x":224,
+      "optimal_y":43,
+      "optimal_ts":7
     }
   },
 {
@@ -491,15 +465,15 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":5,
-      "instruction":"Click to select destination for Raditation Tin on lower metal shelf",
+      "instruction":"Click where you think the Tin should go",
       "single_response":1,
       "image":"",
       "camera":1,
       "type":2,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_direction":null,
+      "optimal_x":20,
+      "optimal_y":268,
+      "optimal_ts":7
     }
   },
 {
@@ -508,16 +482,16 @@ function get_data(){
       "video":"12",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":1,
-      "instruction":"Click when gripper is aligned with block",
+      "timestamp":5,
+      "instruction":"Click middle button when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":2,
       "type":1,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":30
     }
   },
 {
@@ -525,17 +499,17 @@ function get_data(){
       "id":13,
       "video":"13",
       "treatment":"NONE",
-      "paused":1,
-      "timestamp":13,
-      "instruction":"Select rotation direction to dock plate with slot",
+      "paused":0,
+      "timestamp":14,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
       "single_response":1,
       "image":"",
       "camera":4,
       "type":1,
       "optimal_direction":2,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":15
     }
   },
 {
@@ -544,16 +518,16 @@ function get_data(){
       "video":"14",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":2,
-      "instruction":"Click when you see a likely collision",
+      "timestamp":19,
+      "instruction":"Click if and where you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
       "type":2,
       "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_x":168,
+      "optimal_y":183,
+      "optimal_ts":130
     }
   },
 {
@@ -563,15 +537,15 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click when you see a likely collision",
+      "instruction":"Click if and where you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
       "type":2,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_direction":null,
+      "optimal_x":222,
+      "optimal_y":31,
+      "optimal_ts":4
     }
   },
 {
@@ -581,11 +555,11 @@ function get_data(){
       "treatment":"NONE",
       "paused":1,
       "timestamp":11,
-      "instruction":"Select rotation direction to dock plate with slot",
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
       "single_response":1,
       "image":"",
       "camera":2,
-      "type":2,
+      "type":1,
       "optimal_direction":2,
       "optimal_x":null,
       "optimal_y":null,
@@ -598,13 +572,14 @@ function get_data(){
       "video":"17",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":1,
-      "instruction":"Click when gripper is aligned with block",
+      "timestamp":5,
+			  // 1=up, 2=right,3=down,4=left,5=grip
+      "instruction":"Click middle button when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":2,
-      "type":2,
-      "optimal_direction":null,
+      "type":1,
+      "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
       "optimal_ts":18
@@ -613,15 +588,15 @@ function get_data(){
 {
     "asset":{
       "id":18,
-      "video":"11",
+      "video":"18",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":100,
-      "instruction":"Click .",
+      "timestamp":8,
+      "instruction":"Click where you think the Plate should go",
       "single_response":1,
       "image":"",
       "camera":1,
-      "type":1,
+      "type":2,
       "optimal_direction":1,
       "optimal_x":1,
       "optimal_y":1,
@@ -631,36 +606,36 @@ function get_data(){
 {
     "asset":{
       "id":19,
-      "video":"11",
+      "video":"19",
       "treatment":"NONE",
-      "paused":0,
-      "timestamp":1,
-      "instruction":"Click on nearest slot hole",
+      "paused":1,
+      "timestamp":5,
+      "instruction":"Click on slot hole nearest to the gripper",
       "single_response":1,
       "image":"",
       "camera":1,
       "type":2,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_direction":null,
+      "optimal_x":502,
+      "optimal_y":154,
+      "optimal_ts":null
     }
   },
 {
     "asset":{
       "id":20,
-      "video":"11",
+      "video":"20",
       "treatment":"NONE",
       "paused":1,
-      "timestamp":1,
-      "instruction":"Rotate slot anticlockwise 90 degrees",
+      "timestamp":10,
+      "instruction":"Click where you think the Slot should go",
       "single_response":1,
       "image":"",
-      "camera":4,
-      "type":1,
-      "optimal_direction":4,
-      "optimal_x":null,
-      "optimal_y":null,
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":308,
+      "optimal_y":165,
       "optimal_ts":null
     }
   },
@@ -670,16 +645,16 @@ function get_data(){
       "video":"21",
       "treatment":"NONE",
       "paused":0,
-      "timestamp":2,
-      "instruction":"Click when you see a likely collision",
+      "timestamp":9,
+      "instruction":"Click if and where you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
       "type":2,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_direction":null,
+      "optimal_x":132,
+      "optimal_y":178,
+      "optimal_ts":13
     }
   },
 {
@@ -689,15 +664,15 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click when you see a likely collision",
+      "instruction":"Click if and where you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
       "type":2,
-      "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_direction":null,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":51
     }
   },
 {
@@ -706,16 +681,16 @@ function get_data(){
       "video":"23",
       "treatment":"NONE",
       "paused":1,
-      "timestamp":5,
-      "instruction":"Select rotation direction to dock plate with slot",
+      "timestamp":58,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
       "single_response":1,
       "image":"",
       "camera":1,
       "type":1,
       "optimal_direction":2,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
     }
   },
 {
@@ -725,17 +700,1046 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click when you see a likely collision",
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":268,
+      "optimal_y":154,
+      "optimal_ts":7
+    }
+  },
+{
+    "asset":{
+      "id":1,
+      "video":"25",
+      "treatment":"NONE/AR1",
+      "paused":0,
+      "timestamp":4,
+      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":23
+    }
+  },
+{
+	    "asset":{
+	      "id":2,
+	      "video":"26",
+	      "treatment":"NONE/AR1",
+	      "paused":1,
+	      "timestamp":59,
+	      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+	      "single_response":1,
+	      "image":"",
+	      "camera":2,
+	      "type":1,
+	      "optimal_direction":5,
+	      "optimal_x":null,
+	      "optimal_y":null,
+	      "optimal_ts":null
+	    }
+	  },
+{
+		 "asset":{
+		  "id":5,
+		  "video":"27",
+		      "treatment":"NONE/AR1",
+		      "paused":0,
+		      "timestamp":43,
+		      "instruction":"Click on a suitable location to place the Plate",
+		      "single_response":1,
+		      "image":"",
+		      "camera":1,
+		      "type":2,
+		      "optimal_direction":null,
+		      "optimal_x":426,
+		      "optimal_y":216,
+		      "optimal_ts":44
+		    }
+		  },
+{
+    "asset":{
+      "id":12,
+      "video":"28",
+      "treatment":"NONE/AR1",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":30
+    }
+  },
+{
+	    "asset":{
+	      "id":13,
+	      "video":"29",
+	      "treatment":"NONE/AR1",
+	      "paused":0,
+	      "timestamp":14,
+	      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+	      "single_response":1,
+	      "image":"",
+	      "camera":4,
+	      "type":1,
+	      "optimal_direction":2,
+	      "optimal_x":null,
+	      "optimal_y":null,
+	      "optimal_ts":15
+	    }
+	  },{
+    "asset":{
+      "id":16,
+      "video":"30",
+      "treatment":"NONE/AR1",
+      "paused":1,
+      "timestamp":11,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":17,
+      "video":"31",
+      "treatment":"NONE/AR1",
+      "paused":0,
+      "timestamp":5,
+			  // 1=up, 2=right,3=down,4=left,5=grip
+      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":18
+    }
+  },
+{
+    "asset":{
+      "id":22,
+      "video":"32",
+      "treatment":"NONE/AR1",
+      "paused":0,
+      "timestamp":2,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":51
+    }
+  },
+{
+    "asset":{
+      "id":23,
+      "video":"33",
+      "treatment":"NONE/AR1",
+      "paused":1,
+      "timestamp":58,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":1,
+      "video":"34",
+      "treatment":"NONE/AR2",
+      "paused":0,
+      "timestamp":4,
+      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":23
+    }
+  },
+{
+    "asset":{
+      "id":2,
+      "video":"35",
+      "treatment":"NONE/AR2",
+      "paused":1,
+      "timestamp":59,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":5,
+      "video":"36",
+      "treatment":"NONE/AR2",
+      "paused":0,
+      "timestamp":43,
+      "instruction":"Click on a suitable location to place the Plate",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":426,
+      "optimal_y":216,
+      "optimal_ts":44
+    }
+  },
+{
+    "asset":{
+      "id":12,
+      "video":"37",
+      "treatment":"NONE/AR2",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":30
+    }
+  },
+{
+    "asset":{
+      "id":13,
+      "video":"38",
+      "treatment":"NONE/AR2",
+      "paused":0,
+      "timestamp":14,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":15
+    }
+  },
+{
+    "asset":{
+      "id":16,
+      "video":"39",
+      "treatment":"NONE/AR2",
+      "paused":1,
+      "timestamp":11,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":17,
+      "video":"40",
+      "treatment":"NONE/AR2",
+      "paused":0,
+      "timestamp":5,
+			  // 1=up, 2=right,3=down,4=left,5=grip
+      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":18
+    }
+  },
+{
+    "asset":{
+      "id":22,
+      "video":"41",
+      "treatment":"NONE/AR2",
+      "paused":0,
+      "timestamp":2,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":51
+    }
+  },
+{
+    "asset":{
+      "id":23,
+      "video":"42",
+      "treatment":"NONE/AR2",
+      "paused":1,
+      "timestamp":58,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":2,
+      "video":"43",
+      "treatment":"AR1/NONE",
+      "paused":1,
+      "timestamp":59,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":3,
+      "video":"44",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":8,
+      "instruction":"Select a suitable grip point",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":498,
+      "optimal_y":191,
+      "optimal_ts":9
+    }
+  },
+	{
+    "asset":{
+      "id":5,
+      "video":"45",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":43,
+      "instruction":"Click on a suitable location to place the Plate",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":426,
+      "optimal_y":216,
+      "optimal_ts":44
+    }
+  },
+{
+    "asset":{
+      "id":7,
+      "video":"47",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":12,
+      "instruction":"Click on a suitable location to place the Plate",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":517,
+      "optimal_y":179,
+      "optimal_ts":13
+    }
+  },
+{
+    "asset":{
+      "id":8,
+      "video":"48",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":6,
+      "instruction":"Click on the Tin you need to pickup",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":266,
+      "optimal_y":151,
+      "optimal_ts":6.5
+    }
+  },
+{
+    "asset":{
+      "id":9,
+      "video":"49",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click where you think the Tin should go",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":287,
+      "optimal_y":246,
+      "optimal_ts":6
+    }
+  },
+	{
+    "asset":{
+      "id":10,
+      "video":"50",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":224,
+      "optimal_y":43,
+      "optimal_ts":7
+    }
+  },
+{
+    "asset":{
+      "id":11,
+      "video":"51",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click where you think the Tin should go",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":20,
+      "optimal_y":268,
+      "optimal_ts":7
+    }
+  },
+{
+    "asset":{
+      "id":13,
+      "video":"52",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":14,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":15
+    }
+  },
+{
+    "asset":{
+      "id":14,
+      "video":"53",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":19,
+      "instruction":"Click if and where you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
       "type":2,
       "optimal_direction":1,
-      "optimal_x":1,
-      "optimal_y":1,
-      "optimal_ts":1
+      "optimal_x":168,
+      "optimal_y":183,
+      "optimal_ts":130
+    }
+  },
+{
+    "asset":{
+      "id":15,
+      "video":"54",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":2,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":222,
+      "optimal_y":31,
+      "optimal_ts":4
+    }
+  },
+{
+    "asset":{
+      "id":19,
+      "video":"55",
+      "treatment":"AR1/NONE",
+      "paused":1,
+      "timestamp":5,
+      "instruction":"Click on slot hole nearest to the gripper",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":502,
+      "optimal_y":154,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":20,
+      "video":"56",
+      "treatment":"AR1/NONE",
+      "paused":1,
+      "timestamp":10,
+      "instruction":"Click where you think the Slot should go",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":308,
+      "optimal_y":165,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":21,
+      "video":"57",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":9,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":132,
+      "optimal_y":178,
+      "optimal_ts":13
+    }
+  },
+{
+    "asset":{
+      "id":5,
+      "video":"58",
+      "treatment":"AR2/AR1",
+      "paused":0,
+      "timestamp":43,
+      "instruction":"Click on a suitable location to place the Plate",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":426,
+      "optimal_y":216,
+      "optimal_ts":44
+    }
+  },
+{
+    "asset":{
+      "id":13,
+      "video":"59",
+      "treatment":"AR2/AR1",
+      "paused":0,
+      "timestamp":14,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":15
+    }
+  },
+{
+    "asset":{
+      "id":2,
+      "video":"60",
+      "treatment":"AR2/NONE",
+      "paused":1,
+      "timestamp":59,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":3,
+      "video":"61",
+      "treatment":"AR1/NONE",
+      "paused":0,
+      "timestamp":8,
+      "instruction":"Select a suitable grip point",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":498,
+      "optimal_y":191,
+      "optimal_ts":9
+    }
+  },
+{
+    "asset":{
+      "id":5,
+      "video":"62",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":43,
+      "instruction":"Click on a suitable location to place the Plate",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":426,
+      "optimal_y":216,
+      "optimal_ts":44
+    }
+  },
+{
+    "asset":{
+      "id":7,
+      "video":"64",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":12,
+      "instruction":"Click on a suitable location to place the Plate",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":517,
+      "optimal_y":179,
+      "optimal_ts":13
+    }
+  },
+{
+    "asset":{
+      "id":8,
+      "video":"65",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":6,
+      "instruction":"Click on the Tin you need to pickup",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":266,
+      "optimal_y":151,
+      "optimal_ts":6.5
+    }
+  },
+{
+    "asset":{
+      "id":9,
+      "video":"66",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click where you think the Tin should go",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":287,
+      "optimal_y":246,
+      "optimal_ts":6
+    }
+  },
+{
+    "asset":{
+      "id":10,
+      "video":"67",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":224,
+      "optimal_y":43,
+      "optimal_ts":7
+    }
+  },
+{
+    "asset":{
+      "id":11,
+      "video":"68",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":5,
+      "instruction":"Click where you think the Tin should go",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":20,
+      "optimal_y":268,
+      "optimal_ts":7
+    }
+  },
+{
+    "asset":{
+      "id":13,
+      "video":"69",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":14,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":15
+    }
+  },
+{
+    "asset":{
+      "id":14,
+      "video":"70",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":19,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":1,
+      "optimal_x":168,
+      "optimal_y":183,
+      "optimal_ts":130
+    }
+  },
+{
+    "asset":{
+      "id":15,
+      "video":"71",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":2,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":222,
+      "optimal_y":31,
+      "optimal_ts":4
+    }
+  },
+{
+    "asset":{
+      "id":19,
+      "video":"72",
+      "treatment":"AR2/NONE",
+      "paused":1,
+      "timestamp":5,
+      "instruction":"Click on slot hole nearest to the gripper",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":502,
+      "optimal_y":154,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":20,
+      "video":"73",
+      "treatment":"AR2/NONE",
+      "paused":1,
+      "timestamp":10,
+      "instruction":"Click where you think the Slot should go",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":308,
+      "optimal_y":165,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":21,
+      "video":"74",
+      "treatment":"AR2/NONE",
+      "paused":0,
+      "timestamp":9,
+      "instruction":"Click if and where you see a likely collision",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":132,
+      "optimal_y":178,
+      "optimal_ts":13
+    }
+  },
+{
+    "asset":{
+      "id":2,
+      "video":"75",
+      "treatment":"AR1/AR2",
+      "paused":1,
+      "timestamp":59,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":5,
+      "video":"76",
+      "treatment":"AR1/AR2",
+      "paused":0,
+      "timestamp":43,
+      "instruction":"Click on a suitable location to place the Plate",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":426,
+      "optimal_y":216,
+      "optimal_ts":44
+    }
+  },
+{
+    "asset":{
+      "id":13,
+      "video":"77",
+      "treatment":"AR1/AR2",
+      "paused":0,
+      "timestamp":14,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":15
+    }
+  },
+{
+    "asset":{
+      "id":2,
+      "video":"78",
+      "treatment":"AR2/AR2",
+      "paused":1,
+      "timestamp":59,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":2,
+      "type":1,
+      "optimal_direction":5,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":null
+    }
+  },
+{
+    "asset":{
+      "id":5,
+      "video":"79",
+      "treatment":"AR2/AR2",
+      "paused":0,
+      "timestamp":43,
+      "instruction":"Click on a suitable location to place the Plate",
+      "single_response":1,
+      "image":"",
+      "camera":1,
+      "type":2,
+      "optimal_direction":null,
+      "optimal_x":426,
+      "optimal_y":216,
+      "optimal_ts":44
+    }
+  },
+{
+    "asset":{
+      "id":13,
+      "video":"80",
+      "treatment":"AR2/AR2",
+      "paused":0,
+      "timestamp":14,
+      "instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+      "single_response":1,
+      "image":"",
+      "camera":4,
+      "type":1,
+      "optimal_direction":2,
+      "optimal_x":null,
+      "optimal_y":null,
+      "optimal_ts":15
     }
   }
-]
+];
+
+delete data[21];
+delete data[22];
+delete data[23];
+delete data[40];
+delete data[41];
+delete data[72];
+delete data[73];
+
+/*
+	delete data[3];
+	delete data[4];
+	delete data[5];
+	delete data[13];
+	delete data[21];
+	delete data[22];
+	delete data[23];
+	delete data[26];
+	delete data[31];
+	delete data[32];
+	delete data[33];
+	delete data[34];
+	delete data[35];
+	delete data[36];
+	delete data[37];
+	delete data[38];
+	delete data[39];
+	delete data[40];
+	delete data[41];
+	delete data[44];
+	delete data[45];
+	delete data[52];
+	delete data[57];
+	delete data[58];
+	delete data[59];
+	delete data[60];
+	delete data[61];
+	delete data[62];
+	delete data[63];
+	delete data[64];
+	delete data[65];
+	delete data[66];
+	delete data[67];
+	delete data[68];
+	delete data[69];
+	delete data[70];
+	delete data[71];
+	delete data[72];
+	delete data[73];
+	delete data[74];
+	delete data[75];
+	delete data[76];
+	delete data[77];
+	delete data[78];
+	delete data[79];*/
+
   return data;
 }
