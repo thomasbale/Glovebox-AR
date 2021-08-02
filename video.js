@@ -232,6 +232,7 @@ function update_video(){
   player.src({type: 'video/ogg', src: videoogg});
   player.src({type: 'video/webm', src: videowebm});
   player.currentTime(0);
+	player.poster("assets/play.png")
   //this moves to the next random video
 
   responsegiven = 0;
