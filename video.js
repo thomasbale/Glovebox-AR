@@ -52,7 +52,7 @@ instruction_joystick.parentNode.removeChild(instruction_joystick);
 current_instruction = instruction_locate;
 
 var instruction_live = 0;
-var responsegiven = -1;
+var responsegiven = 0;
 //where are the video files located
 var host = "https://glovebox-ar.fra1.cdn.digitaloceanspaces.com/a_"
 
@@ -64,7 +64,7 @@ var randomIndex = videos[vid_seq]
 // should we pause?
 var paused = 1;
 // At what time?
-var pausetime = 79; // stop at 2 seconds
+var pausetime = 78; // stop at 2 seconds
 // One click or many?
 var single_response = 1;
 var videoid = "intro";
@@ -86,8 +86,8 @@ console.log(sessionStorage.email)
 console.log(sessionStorage.experience)
 
 function render_instruction(){
-	console.log(instruction);
-	console.log(videoid);
+	console.log("instruction:"+instruction);
+	console.log("videoid"+videoid);
   set_camera(camera);
   if (type == 1) {
     current_instruction = instruction_joystick;
@@ -102,10 +102,11 @@ function render_instruction(){
 
 function instruction_response(direction,x,y){
   // 1=up, 2=right,3=down,4=left,5=grip
-	responsegiven = 1;
+
 
   player.play();
   if (instruction_live) {
+		responsegiven = 1;
     submit_response(id,direction,x,y)
 		//player.currentTime((player.duration()-0.5));
     instruction_live = 0;
@@ -199,6 +200,8 @@ document.getElementById('example_video_1').onclick = function clickEvent(e) {
       var rect = e.target.getBoundingClientRect();
       var x = e.clientX - rect.left; //x position within the element.
       var y = e.clientY - rect.top;  //y position within the element.
+			instruction_response(0,x,y)
+			/*
 			if (videoid != "intro") {
 				instruction_response(0,x,y)
 			}else {
@@ -206,7 +209,7 @@ document.getElementById('example_video_1').onclick = function clickEvent(e) {
 				responsegiven = responsegiven + 1;
 				current_instruction.parentNode.removeChild(current_instruction);
 				set_camera(3);
-			}
+			}*/
 
     }
   }
