@@ -147,11 +147,10 @@ function submit_response(uid,direction,x,y){
     .done(function(res) {
       console.log('success')
 			current_instruction.innerHTML = current_instruction.innerHTML.replace(instruction,'**INSTRUCTION**');
-			randomIndex = videos[vid_seq]
+
 
 			if (videoid != "intro") {
 				update_video()
-				vid_seq = vid_seq + 1;
 			}
 
     })
@@ -183,9 +182,9 @@ player.on('ended', function() {
     //  player.play();
     //  attempt = attempt+1;
     //}else {
-  randomIndex = videos[vid_seq]
+  //randomIndex = videos[vid_seq]
   update_video()
-  vid_seq = vid_seq + 1;
+  //vid_seq = vid_seq + 1;
   //player.play()
     //}
 });
@@ -224,6 +223,9 @@ function update_video(){
     window.location.replace("complete.html");
   }
   /// this is the breakpoint where the next video session loads
+
+	vid_seq = vid_seq + 1;
+	randomIndex = videos[vid_seq]
 
   video = get_data()[randomIndex].asset.video
   console.log(video)
@@ -1706,6 +1708,10 @@ function get_data(){
   }
 ];
 
+data.splice(21,3);
+data.splice(40,2);
+data.splice(72,2);
+/*
 delete data[21];
 delete data[22];
 delete data[23];
@@ -1714,7 +1720,7 @@ delete data[41];
 delete data[72];
 delete data[73];
 
-/*
+
 	delete data[3];
 	delete data[4];
 	delete data[5];
