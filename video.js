@@ -45,10 +45,14 @@ instruction_locate = document.getElementById('instruction_locate');
 instruction_joystick = document.getElementById('instruction_joystick');
 instruction_locate.parentNode.removeChild(instruction_locate);
 instruction_joystick.parentNode.removeChild(instruction_joystick);
+//instruction_container.removeChild(instruction_locate);
+//instruction_container.removeChild(instruction_joystick);
+
 // something to manage current state
-current_instruction = instruction_joystick;
+current_instruction = instruction_locate;
+
 var instruction_live = 0;
-var responsegiven = 0;
+var responsegiven = -1;
 //where are the video files located
 var host = "https://glovebox-ar.fra1.cdn.digitaloceanspaces.com/a_"
 
@@ -60,7 +64,7 @@ var randomIndex = videos[vid_seq]
 // should we pause?
 var paused = 1;
 // At what time?
-var pausetime = 99; // stop at 2 seconds
+var pausetime = 79; // stop at 2 seconds
 // One click or many?
 var single_response = 1;
 var videoid = "intro";
@@ -70,8 +74,8 @@ var optimalx = "intro";
 var optimaly = "intro";
 var optimaldir = "intro";
 var optimalts = "intro";
-var instruction = "This is a test instruction!"
-var type = 1;
+var instruction = "This is where questions will appear"
+var type = 2;
 
 
 //console.log(videojs.players)
@@ -80,8 +84,6 @@ player = videojs('example_video_1')
 //sessionStorage.myValue = 'value'
 console.log(sessionStorage.email)
 console.log(sessionStorage.experience)
-
-
 
 function render_instruction(){
 	console.log(instruction);
@@ -101,6 +103,7 @@ function render_instruction(){
 function instruction_response(direction,x,y){
   // 1=up, 2=right,3=down,4=left,5=grip
 	responsegiven = 1;
+
   player.play();
   if (instruction_live) {
     submit_response(id,direction,x,y)
@@ -144,8 +147,12 @@ function submit_response(uid,direction,x,y){
       console.log('success')
 			current_instruction.innerHTML = current_instruction.innerHTML.replace(instruction,'**INSTRUCTION**');
 			randomIndex = videos[vid_seq]
-		  update_video()
-		  vid_seq = vid_seq + 1;
+
+			if (videoid != "intro") {
+				update_video()
+				vid_seq = vid_seq + 1;
+			}
+
     })
     .fail(function(e) {
       console.log("error")
@@ -154,6 +161,7 @@ function submit_response(uid,direction,x,y){
 }
 // there will be a single pause
 player.on('timeupdate', function(e) {
+
     if (player.currentTime() >= pausetime) {
       //randomIndex = videos[vid_seq]
       if (responsegiven == 0) {
@@ -191,7 +199,15 @@ document.getElementById('example_video_1').onclick = function clickEvent(e) {
       var rect = e.target.getBoundingClientRect();
       var x = e.clientX - rect.left; //x position within the element.
       var y = e.clientY - rect.top;  //y position within the element.
-      instruction_response(0,x,y)
+			if (videoid != "intro") {
+				instruction_response(0,x,y)
+			}else {
+				// In this case we must be watching the intro video which is an execption
+				responsegiven = responsegiven + 1;
+				current_instruction.parentNode.removeChild(current_instruction);
+				set_camera(3);
+			}
+
     }
   }
 
