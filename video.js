@@ -68,6 +68,7 @@ var pausetime = 78; // stop at 2 seconds
 // One click or many?
 var single_response = 1;
 var videoid = "intro";
+var sequenceid = "intro";
 var treatment = "intro";
 var camera = 1;
 var optimalx = "intro";
@@ -133,6 +134,7 @@ function submit_response(uid,direction,x,y){
       sub_ts: player.currentTime(),
       direction: direction,x:x,y:y,
       videoid:videoid,
+			sequence:sequenceid,
       treatment:treatment,
       camera:camera,
       optimalx:optimalx,
@@ -248,6 +250,7 @@ function update_video(){
   optimalts = get_data()[randomIndex].asset.optimal_ts;
   instruction = get_data()[randomIndex].asset.instruction;
 	type = get_data()[randomIndex].asset.type;
+	sequenceid = get_data()[randomIndex].asset.id;
 
   player.src({type: 'video/mp4', src: videomp4});
   player.src({type: 'video/ogg', src: videoogg});
