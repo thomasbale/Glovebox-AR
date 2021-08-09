@@ -264,7 +264,7 @@ function update_video(){
 	player.controls(false);
 	player.preload(true);
 
-  if (vid_seq==videos.length-40) {
+  if (vid_seq==videos.length) {
     window.location.replace("complete.html?"+id);
   }
   /// this is the breakpoint where the next video session loads
