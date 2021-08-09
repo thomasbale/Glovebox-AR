@@ -3,7 +3,7 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=960, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -22,7 +22,7 @@
 
 
     <center>
-
+<!--
       <div class="container px-2">
       <div class="row gx-5">
       <div class="col">
@@ -30,6 +30,14 @@
       </div>
       <div class="col">
         <div class="p-3 border bg-light" id='c2'>Camera 2</div>
+      </div>
+      </div>
+      </div>
+-->
+      <div class="container px-2">
+      <div class="row gx-5">
+      <div class="col">
+       <div class="p-3 border bg-light" id='progress'>Introduction Video</div>
       </div>
       </div>
       </div>
@@ -43,11 +51,16 @@
 
 <div id=instruction_container>
 
-<div class="card text-white bg-danger mb-2" id='instruction_joystick' style="width: 20rem;">
+
+<div class="card text-white bg-danger mb-2" id='instruction_joystick' style="width: 30rem;">
   <!--<div class="card-header">Task</div> -->
   <div class="card-body">
     <p class="card-text">**INSTRUCTION**</p>
 
+  <button type="button" class="btn btn-primary"onclick="instruction_response(2,0,0);">← Anticlockwise</button>
+  <button type="button" class="btn btn-primary"onclick="instruction_response(5,0,0);">No Rotation</button>
+  <button type="button" class="btn btn-primary"onclick="instruction_response(4,0,0);">Clockwise →</button>
+<!--
     <div id="joystick" style="width:50%">
   <svg width="100%" height="100%" viewBox="0 0 100 100">
     <defs>
@@ -74,17 +87,23 @@
     <path d="M86,50 78,54 78,46Z" fill="rgba(0,0,0,0.8)" onclick="instruction_response(2,0,0);" />
   </svg>
 </div>
-
+ -->
 
   </div>
 </div>
 
-<div class="card text-white bg-danger mb-2" id='instruction_locate' style="width: 18rem;">
+<div class="card text-white bg-danger mb-2" id='instruction_locate' style="width: 30rem;">
   <!-- <div class="card-header">Question:</div>-->
   <div class="card-body">
     <p class="card-text">**INSTRUCTION**</p>
+  </div>
+</div>
 
-
+<div class="card text-white bg-danger mb-2" id='instruction_grip' style="width: 30rem;">
+  <!-- <div class="card-header">Question:</div>-->
+  <div class="card-body">
+    <p class="card-text">**INSTRUCTION**</p>
+    <button type="button" class="btn btn-primary"onclick="instruction_response(5,0,0);">Grip Now</button>
   </div>
 </div>
 

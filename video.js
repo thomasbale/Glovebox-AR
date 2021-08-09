@@ -43,13 +43,18 @@ instruction_container = document.getElementById('instruction_container');
 // instruction-locate/hazard
 instruction_locate = document.getElementById('instruction_locate');
 instruction_joystick = document.getElementById('instruction_joystick');
+instruction_grip = document.getElementById('instruction_grip');
+progress_bar = document.getElementById('progress');
 instruction_locate.parentNode.removeChild(instruction_locate);
+instruction_grip.parentNode.removeChild(instruction_grip);
 instruction_joystick.parentNode.removeChild(instruction_joystick);
 //instruction_container.removeChild(instruction_locate);
 //instruction_container.removeChild(instruction_joystick);
 
 // something to manage current state
 current_instruction = instruction_locate;
+
+progress_bar.innerHTML = "Introduction Video";
 
 var instruction_live = 0;
 var responsegiven = 0;
@@ -83,31 +88,60 @@ var type = 2;
 player = videojs('example_video_1')
 //update_video();
 //sessionStorage.myValue = 'value'
-console.log(sessionStorage.email)
-console.log(sessionStorage.experience)
+//console.log(sessionStorage.email)
+//console.log(sessionStorage.experience)
 
 function render_instruction(){
-	console.log("instruction:"+instruction);
-	console.log("videoid"+videoid);
-  set_camera(camera);
+	//console.log("instruction:"+instruction);
+	//console.log("videoid"+videoid);
+  //set_camera(camera);
+
+	switch(type) {
+	  case 1:
+	    current_instruction = instruction_joystick;
+	    break;
+	  case 9:
+	    current_instruction = instruction_grip;
+	    break;
+	  default:
+	    current_instruction = instruction_locate;
+	}
+
+	/*
   if (type == 1) {
     current_instruction = instruction_joystick;
-  }else {
-    current_instruction = instruction_locate;
   }
-  current_instruction.innerHTML = current_instruction.innerHTML.replace('**INSTRUCTION**',instruction);
-  instruction_container.appendChild(current_instruction);
-  instruction_live = 1;
+	if (type == 9) {
+		current_instruction = instruction_grip;
+	}
+	else {
+    current_instruction = instruction_locate;
+  }*/
+
+
+
+	if (!current_instruction.parentNode) {
+		current_instruction.innerHTML = current_instruction.innerHTML.replace('**INSTRUCTION**',instruction);
+		instruction_container.appendChild(current_instruction);
+	}
+
+	instruction_live = 1;
 }
 
 
 function instruction_response(direction,x,y){
   // 1=up, 2=right,3=down,4=left,5=grip
 
-
+	//console.log(direction);
   player.play();
   if (instruction_live) {
 		responsegiven = 1;
+
+		if (videoid != "intro") {
+			progress_bar.innerHTML = "Recording response... skipping to next";
+			progress_bar.setAttribute("class", "p-3 border bg-success");
+		}
+
     submit_response(id,direction,x,y)
 		//player.currentTime((player.duration()-0.5));
     instruction_live = 0;
@@ -115,7 +149,7 @@ function instruction_response(direction,x,y){
 			//player.currentTime((player.duration()-0.5));
       current_instruction.parentNode.removeChild(current_instruction);
     }
-    set_camera(3)
+    //set_camera(3)
     if (!single_response) {
       render_instruction()
       instruction_live=1;
@@ -196,6 +230,8 @@ document.getElementById('example_video_1').onclick = function clickEvent(e) {
       player.play();
       //set_camera(2)
     }else {
+
+
       player.play();
       // e = Mouse click event.
       var rect = e.target.getBoundingClientRect();
@@ -217,12 +253,19 @@ document.getElementById('example_video_1').onclick = function clickEvent(e) {
 
 function update_video(){
 
-  console.log(vid_seq)
-  console.log(videos.length)
+	message = "Video "+vid_seq;
+	message = message+" of "+videos.length;
+	if (vid_seq == 0) {
+		message = message + ", Practice Video.";
+	}
+	progress_bar.innerHTML = message;
+	progress_bar.setAttribute("class", "p-3 border bg-light");
+  //console.log(videos.length)
 	player.controls(false);
 	player.preload(true);
-  if (vid_seq==videos.length) {
-    window.location.replace("complete.html");
+
+  if (vid_seq==videos.length-40) {
+    window.location.replace("complete.html?"+id);
   }
   /// this is the breakpoint where the next video session loads
 
@@ -265,7 +308,7 @@ function update_video(){
   if (current_instruction.parentNode) {
     current_instruction.parentNode.removeChild(current_instruction);
   }
-  set_camera(3);
+  //set_camera(3);
 
 }
 
@@ -346,11 +389,11 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":4,
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":4,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -382,7 +425,7 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":8,
-      "instruction":"Select a suitable grip point",
+      "instruction":"Select a suitable grip point in the scene",
       "single_response":1,
       "image":"",
       "camera":1,
@@ -508,11 +551,11 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":5,
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":2,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -599,11 +642,11 @@ function get_data(){
       "paused":0,
       "timestamp":5,
 			  // 1=up, 2=right,3=down,4=left,5=grip
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":2,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -743,11 +786,11 @@ function get_data(){
       "treatment":"NONE/AR1",
       "paused":0,
       "timestamp":4,
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":4,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -797,11 +840,11 @@ function get_data(){
       "treatment":"NONE/AR1",
       "paused":0,
       "timestamp":5,
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":2,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -851,11 +894,11 @@ function get_data(){
       "paused":0,
       "timestamp":5,
 			  // 1=up, 2=right,3=down,4=left,5=grip
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":2,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -905,11 +948,11 @@ function get_data(){
       "treatment":"NONE/AR2",
       "paused":0,
       "timestamp":4,
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":4,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -959,11 +1002,11 @@ function get_data(){
       "treatment":"NONE/AR2",
       "paused":0,
       "timestamp":5,
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":2,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -1014,11 +1057,11 @@ function get_data(){
       "paused":0,
       "timestamp":5,
 			  // 1=up, 2=right,3=down,4=left,5=grip
-      "instruction":"Click middle button when gripper is aligned to gripper block",
+      "instruction":"Click 'Grip Now' when gripper is aligned to gripper block",
       "single_response":1,
       "image":"",
       "camera":2,
-      "type":1,
+      "type":9,
       "optimal_direction":5,
       "optimal_x":null,
       "optimal_y":null,
@@ -1710,10 +1753,63 @@ function get_data(){
     }
   }
 ];
-
-data.splice(21,3);
-data.splice(40,2);
-data.splice(72,2);
+// remove 3
+data.splice(2,1);
+data.splice(12,1);
+data.splice(37,1);
+data.splice(43,1);
+data.splice(60,1);
+// remove 4
+data.splice(3,1);
+// remove 5
+data.splice(4,1);
+data.splice(26,1);
+data.splice(35,1);
+data.splice(44,1);
+data.splice(57,1);
+data.splice(61,1);
+data.splice(75,1);
+data.splice(78,1);
+// remove 6
+data.splice(5,1);
+data.splice(45,1);
+data.splice(62,1);
+// remove 7
+data.splice(6,1);
+data.splice(46,1);
+data.splice(63,1);
+// remove 9
+data.splice(8,1);
+data.splice(48,1);
+data.splice(65,1);
+// remove 12
+data.splice(11,1);
+data.splice(27,1);
+// remove 16
+data.splice(15,1);
+data.splice(29,1);
+data.splice(38,1);
+// remove 17
+data.splice(16,1);
+data.splice(39,1);
+// remove 19
+data.splice(18,1);
+data.splice(54,1);
+data.splice(71,1);
+// remove 20
+data.splice(19,1);
+data.splice(55,1);
+data.splice(72,1);
+// remove 22
+data.splice(21,1);
+data.splice(31,1);
+data.splice(40,1);
+// remove 23
+data.splice(22,1);
+data.splice(32,1);
+data.splice(41,1);
+// remove 24
+data.splice(23,1);
 /*
 delete data[21];
 delete data[22];

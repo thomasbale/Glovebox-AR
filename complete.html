@@ -18,6 +18,8 @@
 </head>
 <body>
 
+
+
 <div class="container-fluid">
 
   <div class="card">
@@ -25,15 +27,31 @@
     AR for remote operations
   </div>
   <div class="card-body">
-    <h5 class="card-title">Experiment complete. Thank you for participating</h5>
-    <p class="card-text">Your submission has been recorded and you can close this window.
+    <h5 class="card-title">Experiment complete. You can close this window.</h5>
 </p>
   </div>
 </div>
 
+<div class="card">
+<div class="card-header">
+  Unique submission code:
+</div>
+<div id=id_container>
+<div class="card-body" >
+  <h5 class="card-title">**HERE**</h5>
+</p>
+</div>
+</div>
+</div>
+
                    <!-- Optional JavaScript -->
                        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
+                       <script type="text/javascript">
+                       var queryString = window.location.search;
+                       queryString = queryString.replace('?','');
+                       console.log(queryString);
+                       document.getElementById('id_container').innerHTML = document.getElementById('id_container').innerHTML.replace('**HERE**',queryString);
+                       </script>
                        <script
                    			  src="https://code.jquery.com/jquery-3.6.0.min.js"
                    			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
