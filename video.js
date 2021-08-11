@@ -295,9 +295,9 @@ function update_video(){
 	type = get_data()[randomIndex].asset.type;
 	sequenceid = get_data()[randomIndex].asset.id;
 
-  player.src({type: 'video/mp4', src: videomp4});
-  player.src({type: 'video/ogg', src: videoogg});
-  player.src({type: 'video/webm', src: videowebm});
+  player.src({type: "video/mp4", src: videomp4});
+  player.src({type: "video/ogg", src: videoogg});
+  player.src({type: "video/webm", src: videowebm});
   player.currentTime(0);
 	player.poster("assets/play.png")
   //this moves to the next random video
