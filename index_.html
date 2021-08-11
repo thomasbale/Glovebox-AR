@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script
+       src="https://code.jquery.com/jquery-3.6.0.min.js"
+       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+       crossorigin="anonymous"></script>
+
+    <title>Experiment | AR for remote operations</title>
+
+
+</head>
+<body>
+
+<div class="container-fluid">
+
+  <div class="card">
+  <div class="card-header">
+    AR for remote operations
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Thank you for participating</h5>
+    <p class="card-text">You can complete this experiment via any web browser, however, it does require a screen larger than 800x600. It must therefore be completed on a laptop or desktop with suitable monitor. When you are ready to start please complete your details below, you will be shown a short demonstration video, and the experiment will follow.
+      <a href="assets/Participant_sheet Exploring how Augmented Reality can help in nuclear plant operations(1).pdf" target="_blank">Participant introduction (PDF)</a>
+</p>
+  </div>
+</div>
+
+
+  <form>
+    <!--
+  <div class="form-group">
+    <label for="exampleFormControlInput2">Submission ID</label>
+    <input type="uid" class="form-control" id="id" placeholder="uid" readonly>
+
+    <label for="exampleFormControlInput1">Name</label>
+    <input type="name" class="form-control" id="name" placeholder="Firstname Lastname">
+
+    <label for="exampleFormControlInput1">Email address</label>
+    <input type="email" class="form-control" id="email" placeholder="name@example.com">
+ -->
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Please indicate your level of experience with remote robotics</label>
+    <select class="form-control" id="experience" required>
+      <option>0 - please select</option>
+      <option>1 - no experience</option>
+      <option>2 - some understanding</option>
+      <option>3 - some experience</option>
+      <option>4 - experienced operator</option>
+    </select>
+  </div>
+  <!--
+  <div class="card">
+  <div class="card-header">
+    Spatial reasoning
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">3 advance questions</h5>
+    <p class="card-text">Please answer the questions below to the best of your ability.
+</p>
+  </div>
+</div>
+
+  <img src="assets/spatial_reasoning_q1.jpg" class="img-fluid" alt="Responsive image">
+
+  <div class="form-group">
+    <label for="exampleFormControlSelect2">Which of the four possible options represents the cube in its folded form?</label>
+    <select multiple class="form-control" id="exampleFormControlSelect2">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+    </select>
+  </div>
+  <img src="assets/spatial_reasoning_q2.jpg" class="img-fluid" alt="Responsive image">
+  <div class="form-group">
+    <label for="exampleFormControlSelect2">Which object on the lower row above best reflects the same object on the row above?</label>
+    <select multiple class="form-control" id="exampleFormControlSelect2">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+      <option>Don't know</option>
+    </select>
+  </div>
+  <img src="assets/spatial_reasoning_q3.jpg" class="img-fluid" alt="Responsive image">
+  <div class="form-group">
+    <label for="exampleFormControlSelect2">When all shapes on top are connected on corresponding edges (x to x, y to y etc.) the complete shape looks like shape: </label>
+    <select multiple class="form-control" id="exampleFormControlSelect2">
+      <option>A</option>
+      <option>B</option>
+      <option>C</option>
+      <option>D</option>
+      <option>E</option>
+      <option>Don't know</option>
+    </select>
+  </div>
+Required meta tags -->
+</form>
+
+<div class="card-body">
+  <h5 class="card-title">I agree that:</h5>
+
+  <ul class="list-group">
+  <li class="list-group-item">I am over 18 years of age</li>
+  <li class="list-group-item">I understand why this research is being undertaken and I have received enough information about the study for me to make a decision about my participation</li>
+  <li class="list-group-item">I understand that I am free to withdraw from the study and free to withdraw my data prior to final consent at any time</li>
+  <li class="list-group-item">I understand that my responses will be recorded, however, any personal information will not be held</li>
+  <li class="list-group-item">I understand and acknowledge that the investigation is designed to promote scientific knowledge and that the University of Bristol will use the data I provide for no purpose other than research</li>
+  <li class="list-group-item">I understand the data I provide will NOT be attributed to me and my name and contact details will not be saved</li>
+  <li class="list-group-item">I understand that data is held securely, encrypted and password protected by University of Bristol and will only be accessible to the named research team</li>
+  <li class="list-group-item">I fully and freely consent to my participation in this study</li>
+</ul>
+
+</div>
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert" id='mobilewarn'>
+  <strong>Warning!</strong> Please ensure you are using a laptop/desktop monitor and have speakers or headphones attached!
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="alert alert-warning alert-dismissible fade show" role="alert" id='experience-select'>
+  <strong>Warning!</strong> Please indicate your level of experience above!
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+
+<button type="button" id="submit" class="btn btn-primary btn-lg" onclick="uid=submit()">Agree and submit</button>
+<div id='loading'>
+  <span class="sr-only">Loading...</span>
+</div>
+<button type="button" id="start" class="btn btn-primary btn-lg" disabled onclick="window.location.href='video.html?'+uid">Start</button>
+
+</div>
+
+                   <!-- Optional JavaScript -->
+                       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+                       <script
+                   			  src="https://code.jquery.com/jquery-3.6.0.min.js"
+                   			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+                   			  crossorigin="anonymous"></script>
+
+                       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+                       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+                       <script src="form.js"></script>
+                     </body>
+
+</html>
