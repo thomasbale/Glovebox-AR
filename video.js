@@ -69,7 +69,7 @@ var randomIndex = videos[vid_seq]
 // should we pause?
 var paused = 1;
 // At what time?
-var pausetime = 74; // stop at 2 seconds
+var pausetime = 75; // stop at 2 seconds
 // One click or many?
 var single_response = 1;
 var videoid = "intro";
@@ -80,7 +80,7 @@ var optimalx = "intro";
 var optimaly = "intro";
 var optimaldir = "intro";
 var optimalts = "intro";
-var instruction = "This is where questions will appear"
+var instruction = "This is where questions will appear. Now click on on the video to continue..."
 var type = 2;
 
 
@@ -515,7 +515,7 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":5,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":1,
@@ -587,7 +587,7 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":19,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -605,7 +605,7 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -714,7 +714,7 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":9,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -732,7 +732,7 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -768,7 +768,7 @@ function get_data(){
       "treatment":"NONE",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -912,7 +912,7 @@ function get_data(){
       "treatment":"NONE/AR1",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -1075,7 +1075,7 @@ function get_data(){
       "treatment":"NONE/AR2",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -1219,7 +1219,7 @@ function get_data(){
       "treatment":"AR1/NONE",
       "paused":0,
       "timestamp":5,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":1,
@@ -1273,7 +1273,7 @@ function get_data(){
       "treatment":"AR1/NONE",
       "paused":0,
       "timestamp":19,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -1291,7 +1291,7 @@ function get_data(){
       "treatment":"AR1/NONE",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -1345,7 +1345,7 @@ function get_data(){
       "treatment":"AR1/NONE",
       "paused":0,
       "timestamp":9,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -1507,7 +1507,7 @@ function get_data(){
       "treatment":"AR2/NONE",
       "paused":0,
       "timestamp":5,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":1,
@@ -1561,7 +1561,7 @@ function get_data(){
       "treatment":"AR2/NONE",
       "paused":0,
       "timestamp":19,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -1579,7 +1579,7 @@ function get_data(){
       "treatment":"AR2/NONE",
       "paused":0,
       "timestamp":2,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
@@ -1633,7 +1633,7 @@ function get_data(){
       "treatment":"AR2/NONE",
       "paused":0,
       "timestamp":9,
-      "instruction":"Click if and where you see a likely collision",
+      "instruction":"Click on the video if you see a likely collision",
       "single_response":1,
       "image":"",
       "camera":4,
