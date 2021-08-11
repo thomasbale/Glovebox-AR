@@ -69,7 +69,7 @@ var randomIndex = videos[vid_seq]
 // should we pause?
 var paused = 1;
 // At what time?
-var pausetime = 84; // stop at 2 seconds
+var pausetime = 74; // stop at 2 seconds
 // One click or many?
 var single_response = 1;
 var videoid = "intro";
