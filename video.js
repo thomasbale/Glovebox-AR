@@ -254,7 +254,7 @@ document.getElementById('example_video_1').onclick = function clickEvent(e) {
 function update_video(){
 
 	message = "Video "+vid_seq;
-	message = message+" of "+videos.length;
+	message = message+" of "+(videos.length-1);
 	if (vid_seq == 0) {
 		message = message + ", Practice Video.";
 	}
