@@ -1751,7 +1751,43 @@ function get_data(){
 	      "optimal_y":null,
 	      "optimal_ts":15
 	    }
-	  }
+	  },
+		{
+				"asset":{
+					"id":20,
+					"video":"73",
+					"treatment":"AR2/NONE",
+					"paused":1,
+					"timestamp":10,
+					"instruction":"Select rotation required to place plate correctly. Middle button for no rotation.",
+					"single_response":1,
+					"image":"",
+					"camera":1,
+					"type":1,
+					"optimal_direction":2,
+					"optimal_x":null,
+					"optimal_y":null,
+					"optimal_ts":null
+				}
+			},
+			{
+					"asset":{
+						"id":20,
+						"video":"20",
+						"treatment":"AR2/NONE",
+						"paused":1,
+						"timestamp":10,
+						"instruction":"Select rotation required to place plate correctly. Middle button for no rotation.",
+						"single_response":1,
+						"image":"",
+						"camera":1,
+						"type":1,
+						"optimal_direction":2,
+						"optimal_x":null,
+						"optimal_y":null,
+						"optimal_ts":null
+					}
+				}
 	];
 
 	var supress = [3,4,5,6,7,9,12,16,17,19,20,22,23,24]
