@@ -67,9 +67,9 @@ shuffle(videos);
 var vid_seq = 0;
 var randomIndex = videos[vid_seq]
 // should we pause?
-var paused = 1;
+var paused = 0;
 // At what time?
-var pausetime = 75; // stop at 2 seconds
+var pausetime = 134; // stop at 2 seconds
 // One click or many?
 var single_response = 1;
 var videoid = "intro";
