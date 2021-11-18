@@ -80,8 +80,8 @@ var optimalx = "intro";
 var optimaly = "intro";
 var optimaldir = "intro";
 var optimalts = "intro";
-var instruction = "This is where questions will appear. Now click on on the video to continue..."
-var type = 2;
+var instruction = "This is where questions will appear. Now click any rotation direction to clear."
+var type = 1;
 
 
 //console.log(videojs.players)
