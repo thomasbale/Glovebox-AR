@@ -454,6 +454,24 @@ function get_data(){
 	      "optimal_ts":null
 	    }
 	  },
+		{ // 1=up, 2=right,3=down,4=left,5=grip
+				"asset":{
+					"id":5,
+					"video":"27",
+					"treatment":"AR",
+					"paused":1,
+					"timestamp":12,
+					"instruction":"Select rotation required to connect to gripper block. Middle button for no rotation.",
+					"single_response":1,
+					"image":"",
+					"camera":1,
+					"type":1,
+					"optimal_direction":4,
+					"optimal_x":null,
+					"optimal_y":null,
+					"optimal_ts":null
+				}
+			},
 	{
 	    "asset":{
 	      "id":7,
@@ -580,6 +598,24 @@ function get_data(){
 	      "optimal_ts":null
 	    }
 	  },
+		{
+				"asset":{
+					"id":13,
+					"video":"52",
+					"treatment":"AR",
+					"paused":0,
+					"timestamp":15,
+					"instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
+					"single_response":1,
+					"image":"",
+					"camera":4,
+					"type":1,
+					"optimal_direction":2,
+					"optimal_x":null,
+					"optimal_y":null,
+					"optimal_ts":null
+				}
+			},
 	{
 	    "asset":{
 	      "id":14,
@@ -1231,24 +1267,6 @@ function get_data(){
 	    }
 	  },
 	{
-		"asset":{
-			"id":13,
-			"video":"13",
-			"treatment":"AR",
-			"paused":0,
-			"timestamp":15,
-			"instruction":"Select rotation required to connect plate to slot. Middle button for no rotation.",
-			"single_response":1,
-			"image":"",
-			"camera":4,
-			"type":1,
-			"optimal_direction":2,
-			"optimal_x":null,
-			"optimal_y":null,
-			"optimal_ts":null
-	    }
-	  },
-	{
 	    "asset":{
 	      "id":14,
 	      "video":"53",
@@ -1846,7 +1864,7 @@ function get_data(){
 		}
 	}
 
-		//console.log(returndata)
+		console.log(returndata)
 //console.log(supress)
 //console.log(data.length)
 /* remove 3
